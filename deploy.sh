@@ -1,23 +1,36 @@
 #!/bin/bash
 
-# SSH deployment script for Play with Docker
-echo "Deploying Spring Boot app to Play with Docker..."
+echo "🚀 Deploying API Testing Application to Docker..."
 
-# Connect and deploy
-ssh ip172-18-0-36-d29ehni91nsg00fa4qk0@direct.labs.play-with-docker.com << 'EOF'
-# Clone the repository
-git clone https://github.com/Rajib3811/api-testing.git
-cd api-testing
+# Build the Docker image
+echo "📦 Building Docker image..."
+docker build -t apitesting-app .
 
-# Build and run the application
-docker-compose up --build -d
+# Stop and remove existing container if it exists
+echo "🛑 Stopping existing container..."
+docker stop apitesting-app 2>/dev/null || true
+docker rm apitesting-app 2>/dev/null || true
+
+# Run the container
+echo "▶️ Starting new container..."
+docker run -d \
+  --name apitesting-app \
+  -p 8080:8080 \
+  apitesting-app
 
 # Show running containers
-docker ps
+echo "📋 Container status:"
+docker ps | grep apitesting-app
+
+echo "✅ Deployment complete!"
+echo "🌐 Application should be available at: http://localhost:8080"
+echo "📊 API endpoints:"
+echo "   - http://localhost:8080/hello"
+echo "   - http://localhost:8080/api/countries"
+echo "   - http://localhost:8080/api/biometric/fingerprint"
+echo "   - http://localhost:8080/api/sms/send"
+echo "   - http://localhost:8080/chat (WebSocket chat)"
 
 # Show logs
-docker-compose logs -f
-EOF
-
-echo "Deployment complete!"
-echo "Your application should be accessible at: http://192.168.0.19:8080"
+echo "📝 Container logs (last 10 lines):"
+docker logs apitesting-app --tail 10
