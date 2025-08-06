@@ -31,14 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-# Sensitive files - tokens, keys, credentials
-*Token*.txt
-*token*.txt
-*secret*.txt
-*password*.txt
-*key*.txt
-*.env
-.env.*
-credentials.json
-config.properties
